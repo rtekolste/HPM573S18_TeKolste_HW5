@@ -76,15 +76,14 @@ class AllGames:
         self.odds_heads=odds_heads
         self._num_games=num_games
         self._outcomes=[]
-        self._losemoney = []
 
     def simulate(self):
         for i in range(self._num_games):
             game = Game(i, self.odds_heads)
             game.one_game()
-            x=game.Get_x()
+            x = game.Get_x()
             self._outcomes.append(x)
-        return CohortOutcomes(self)
+        return self._outcomes
 
     def get_average_x(self):
         return sum(self._outcomes)/self._num_games
@@ -96,12 +95,17 @@ class AllGames:
         return self._outcomes
 
     def LoseMoney(self):
-        for i in len(self._outcomes):
-            if (self._outcomes[i]<1):
-                self._losemoney=1
-            else:
-                self._losemoney=0
+        self._losemoney=0
+        for i in self._outcomes:
+            if i<0:
+                self._losemoney+=1
         return self._losemoney
+
+    def get_min(self):
+       return min(self._outcomes)
+
+    def get_max(self):
+        return max(self._outcomes)
 
 class CohortOutcomes:
     def __init(self, simulated_cohort):
